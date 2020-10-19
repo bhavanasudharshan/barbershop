@@ -25,27 +25,24 @@ public class BarberShopDailyWorkFlow {
             barberShop.visit(customer);
             System.out.println("waitqueue id in CustomerArrival" + System.identityHashCode(barberShop.waitQueue));
             System.out.println(barberShop.waitQueue.size());
-            this.cancel();
         }
     }
 
     public static void main(String[] args) throws InterruptedException {
         BarberShopDailyWorkFlow workFlow = new BarberShopDailyWorkFlow();
         workFlow.barberShop.open();
+        Timer timer = new Timer();
+
         int count = 2;
         while (count > 0) {
             count--;
-            Timer timer = new Timer();
             TimerTask timerTask = workFlow.new CustomerArrival();
             timer.schedule(timerTask, 200);
-//            IntStream limit = new Random().ints(97, 122 + 1).limit(4);
-//            StringBuilder builder = limit.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append);
-//            workFlow.barberShop.visit(new Customer(builder.toString()));
         }
-//        System.out.println("waitqueue id in main " + System.identityHashCode(workFlow.barberShop.waitQueue));
-//
-//        System.out.println(workFlow.barberShop.waitQueue.size());
+
         Thread.sleep(10000);
+        timer.cancel();
+        timer.purge();
         workFlow.barberShop.close();
     }
 }

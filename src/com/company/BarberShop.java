@@ -11,11 +11,12 @@ public class BarberShop {
     volatile Barber barber = new Barber();
     volatile Cashier cashier = new Cashier();
 
+
     BarberShop(final int capacity) {
         shopClosed = new AtomicBoolean(true);
         waitQueue = new ArrayBlockingQueue<>(capacity);
         cashierQueue = new ArrayBlockingQueue<>(capacity);
-        new Thread(barber).start();
+         new Thread(barber).start();
         new Thread(cashier).start();
     }
 
