@@ -12,7 +12,7 @@ public class BarberShop {
     volatile Cashier cashier = new Cashier();
 
     BarberShop(final int capacity) {
-        shopClosed = new AtomicBoolean(false);
+        shopClosed = new AtomicBoolean(true);
         waitQueue = new ArrayBlockingQueue<>(capacity);
         cashierQueue = new ArrayBlockingQueue<>(capacity);
         new Thread(barber).start();
@@ -56,15 +56,15 @@ public class BarberShop {
 
         public void run() {
             while (true) {
-//                System.out.println("waitqueue id in barber: "+System.identityHashCode(waitQueue));
-//                System.out.println("shopclosed in barber: "+System.identityHashCode(shopClosed));
+                System.out.println("waitqueue id in barber: "+System.identityHashCode(waitQueue)+" size:"+waitQueue.size());
+                System.out.println("shopclosed in barber: "+System.identityHashCode(shopClosed)+ "value: "+shopClosed.get());
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-//                System.out.println("barbar looking to service the queue");
-                if (waitQueue.size() > 0 && shopClosed.get()) {
+                System.out.println("barbar looking to service the queue");
+                if (waitQueue.size() > 0 && !shopClosed.get()) {
                     Customer customer = waitQueue.poll();
                     serve(customer);
                     cashierQueue.offer(customer);
